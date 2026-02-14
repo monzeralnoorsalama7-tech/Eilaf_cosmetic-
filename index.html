@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eilaf Alnoor Cosmetic</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif;}
+body{background:#f8f8f8;color:#111;direction:rtl;}
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px solid #eee;}
+.logo{display:flex;flex-direction:column;}
+.logo .brand{font-size:24px;font-weight:700;}
+.logo .sub{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#777;}
+.about-btn{background:transparent;color:#555;border:none;padding:4px 8px;font-size:12px;cursor:pointer;}
+.about-btn:hover{color:#000;text-decoration:underline;}
+.cart-icon{position:relative;cursor:pointer;padding:10px 18px;border-radius:30px;background:#111;color:#fff;font-weight:bold;}
+.cart-count{position:absolute;top:-8px;left:-8px;background:#fff;color:#000;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;border:1px solid #111;}
+.hero{height:200px;display:flex;justify-content:center;align-items:center;text-align:center;background:#ffffff;border-bottom:1px solid #eee;}
+.about-section{display:none;width:90%;margin:40px auto;background:#fff;padding:40px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.05);line-height:1.8;}
+.about-section.active{display:block;}
+.container{width:90%;margin:50px auto;}
+.section-title{font-size:22px;margin-bottom:25px;border-right:5px solid #111;padding-right:10px;}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;margin-bottom:50px;}
+.card{background:#fff;border-radius:20px;overflow:hidden;transition:0.3s;border:1px solid #eee;position:relative;padding-bottom:15px;text-align:center;}
+.card:hover{transform:translateY(-6px);box-shadow:0 10px 25px rgba(0,0,0,0.08);}
+.badge{position:absolute;top:15px;right:15px;background:#e60023;color:#fff;padding:6px 12px;font-size:12px;border-radius:20px;font-weight:bold;}
+.card img{width:100%;height:220px;object-fit:cover;}
+.card-body{padding:20px;text-align:center;}
+.price{margin:12px 0;}
+.old-price{text-decoration:line-through;color:#888;font-size:14px;display:block;}
+.new-price{font-weight:bold;font-size:20px;color:#e60023;}
+.qty{display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:15px;}
+.qty button{background:#111;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;}
+.add-btn{background:#111;color:#fff;border:none;padding:12px;border-radius:10px;cursor:pointer;width:100%;font-weight:bold;transition:0.3s;}
+.add-btn:hover{background:#333;}
+.cart-popup{position:fixed;top:0;left:-400px;width:350px;height:100%;background:#fff;padding:25px;transition:0.4s;overflow-y:auto;z-index:2000;box-shadow:5px 0 30px rgba(0,0,0,0.2);}
+.cart-popup.active{left:0;}
+.back-btn{background:#f2f2f2;padding:8px 12px;border-radius:8px;cursor:pointer;margin-bottom:15px;display:inline-block;font-size:13px;}
+.back-btn:hover{background:#ddd;}
+.cart-item{background:#f5f5f5;padding:12px;border-radius:10px;margin-bottom:12px;display:flex;flex-direction:column;}
+.cart-item .qty-controls{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:5px;}
+.cart-item .qty-controls button{padding:3px 8px;border:none;background:#ddd;cursor:pointer;border-radius:5px;}
+.cart-item .remove-btn{background:red;color:#fff;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:12px;margin-top:5px;}
+.total{margin-top:20px;font-weight:bold;text-align:center;font-size:18px;}
+.whatsapp{background:#25D366;margin-top:20px;padding:12px;text-align:center;border-radius:10px;cursor:pointer;font-weight:bold;color:#fff;}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">
+<span class="brand">Eilaf Alnoor</span>
+<span class="sub">cosmetic</span>
+</div>
+<button class="about-btn" onclick="toggleAbout()">حول</button>
+<div class="cart-icon" onclick="toggleCart()">🛍 السلة
+<div class="cart-count" id="cartCount">0</div>
+</div>
+</header>
+
+<div class="hero"><h1>فخامة العناية تبدأ من هنا ✨</h1></div>
+
+<div class="about-section" id="aboutSection">
+<h2>حول Eilaf Cosmetic</h2>
+<p>متجر متخصص في منتجات العناية بالبشرة والاكسسوارات النسائية الفاخرة.</p>
+</div>
+
+<div class="container">
+
+<h2 class="section-title">منتجات العناية بالبشرة</h2>
+<div class="products" id="skincare-products"></div>
+
+<h2 class="section-title">الاكسسوارات</h2>
+<div class="products" id="accessory-products"></div>
+
+</div>
+
+<div class="cart-popup" id="cart">
+<div class="back-btn" onclick="toggleCart()">⬅ رجوع</div>
+<h2>سلة المشتريات</h2>
+<div id="cartItems"></div>
+<div class="total">الإجمالي: <span id="totalPrice">0</span> جنيه</div>
+<div class="whatsapp" onclick="sendOrder()">إرسال عبر واتساب</div>
+</div>
+
+<script>
+// البيانات
+const products = [
+{type:'skincare',name:'كريم تفتيح فاخر',old:8000,newp:6000,img:'photo/mr.jpg'},
+{type:'skincare',name:'صابونية عناية بالبشرة',old:13000,newp:10000,img:'photo/sp.jpg'},
+{type:'skincare',name:'مورد شفايف',newp:3000,img:'photo/mor.jpg'},
+{type:'skincare',name:'عجوبة',newp:10000,img:'photo/agoba.jpg'},
+{type:'skincare',name:'شامبو هيد اند شولدر',newp:7000,img:'photo/hda.jpg'},
+{type:'skincare',name:'شامبو بانتين',newp:7000,img:'photo/pan.jpg'},
+{type:'skincare',name:'صابونة M3',newp:6000,img:'photo/m.jpg'},
+{type:'skincare',name:'صابونة كوجيسان',newp:6000,img:'photo/coje.jpg'},
+{type:'accessory',name:'بنس',newp:1000,img:'photo/bn.jpg'},
+{type:'accessory',name:'امشاط',newp:1000,img:'photo/mo.jpg'},
+{type:'accessory',name:'دبابيس',newp:1000,img:'photo/db.jpg'},
+{type:'accessory',name:'جونت',newp:2000,img:'photo/jwa.jpg'},
+{type:'accessory',name:'خاتم',newp:1000,img:'photo/katim.jpg'},
+{type:'accessory',name:'مناكير',newp:2000,img:'photo/mn.jpg'},
+{type:'accessory',name:'باندات',newp:1000,img:'photo/jw.jpg'},
+{type:'accessory',name:'اساور',newp:2000,img:'photo/asawer.jpg'},
+{type:'accessory',name:'فرش',newp:1000,img:'photo/forash.jpg'},
+  {type:'accessory',name:'معاصم',newp:2000,img:'photo/masim.jpg'},
+];
+
+let quantities = Array(products.length).fill(1);
+let cart = [];
+
+// توليد المنتجات
+function renderProducts(){
+  products.forEach((p,i)=>{
+    const container = p.type==='skincare'?document.getElementById('skincare-products'):document.getElementById('accessory-products');
+    const badge = p.old?'<div class="badge">عرض خاص</div>':'';
+    const oldPrice = p.old?`<span class="old-price">${p.old} جنيه</span>`:'';
+    const card = document.createElement('div');
+    card.classList.add('card');
+    card.innerHTML = `
+      ${badge}
+      <img src="${p.img}" alt="${p.name}">
+      <div class="card-body">
+        <h3>${p.name}</h3>
+        <div class="price">${oldPrice}<span class="new-price">${p.newp} جنيه</span></div>
+        <div class="qty">
+          <button onclick="changeQty(${i},-1)">-</button>
+          <span id="qty${i}">1</span>
+          <button onclick="changeQty(${i},1)">+</button>
+        </div>
+        <button class="add-btn" onclick="addToCart(${i})">إضافة للسلة</button>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+// وظائف السلة
+function toggleCart(){document.getElementById('cart').classList.toggle('active');}
+function toggleAbout(){document.getElementById('aboutSection').classList.toggle('active');}
+
+function changeQty(i,val){
+  quantities[i] += val;
+  if(quantities[i]<1) quantities[i]=1;
+  document.getElementById('qty'+i).innerText = quantities[i];
+}
+
+function addToCart(i){
+  const p = products[i];
+  let existing = cart.find(item=>item.name===p.name);
+  if(existing){existing.qty += quantities[i];}
+  else{cart.push({name:p.name,price:p.newp,qty:quantities[i]});}
+  renderCart();
+}
+
+function renderCart(){
+  let items='', total=0;
+  cart.forEach((item,index)=>{
+    total += item.price*item.qty;
+    items += `<div class="cart-item">
+      <span>${item.name}</span>
+      <span>${item.price*item.qty} جنيه</span>
+      <div class="qty-controls">
+        <button onclick="decreaseQty(${index})">-</button>
+        <span>${item.qty}</span>
+        <button onclick="increaseQty(${index})">+</button>
+      </div>
+      <button class="remove-btn" onclick="removeItem(${index})">حذف</button>
+    </div>`;
+  });
+  document.getElementById('cartItems').innerHTML = items;
+  document.getElementById('totalPrice').innerText = total;
+  document.getElementById('cartCount').innerText = cart.length;
+}
+
+function increaseQty(index){cart[index].qty++; renderCart();}
+function decreaseQty(index){if(cart[index].qty>1){cart[index].qty--;}else{cart.splice(index,1);} renderCart();}
+function removeItem(index){cart.splice(index,1); renderCart();}
+
+function sendOrder(){
+  if(cart.length==0){alert("السلة فارغة"); return;}
+  let msg = "طلب جديد من Eilaf Alnoor Cosmetic:%0A";
+  let total = 0;
+  cart.forEach(item=>{msg+=`${item.name} × ${item.qty} = ${item.price*item.qty} جنيه%0A`; total+=item.price*item.qty;});
+  msg += `%0Aالإجمالي: ${total} جنيه`;
+  window.open(`https://wa.me/249 99 944 0651?text=${msg}`);
+}
+
+renderProducts();
+</script>
+
+</body>
+</html>
